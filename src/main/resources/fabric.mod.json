@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "lunaclient",
+  "version": "${version}",
+  "name": "Luna Client",
+  "description": "Client de PvP (crystal PvP) con menus de cristal, temas y HUD editable.",
+  "authors": ["Luna"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.lunaclient.LunaClient"]
+  },
+  "mixins": ["lunaclient.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
