@@ -46,7 +46,7 @@ public final class Features {
 	// ---- Zoom (cambia el FOV mientras mantienes la tecla; no necesita mixins) ----
 	private static void zoom(Minecraft mc) {
 		var fov = mc.options.fov();
-		boolean want = ZOOM_KEY != null && ZOOM_KEY.isDown() && mc.screen == null && mc.player != null;
+		boolean want = ZOOM_KEY != null && ZOOM_KEY.isDown() && noScreen(mc) && mc.player != null;
 		int target = LunaConfig.get().zoomFov;
 		if (want) {
 			if (savedFov == null) {
@@ -66,6 +66,22 @@ public final class Features {
 				fov.set(savedFov);
 				savedFov = null;
 			}
+		}
+	}
+
+	/** true si no hay ninguna pantalla abierta. Por reflexion, porque 26.2 movio `screen` de Minecraft a Gui. */
+	private static boolean noScreen(Minecraft mc) {
+		try {
+			Object gui = mc.getClass().getField("gui").get(mc);
+			for (String n : new String[] {"screen", "getScreen", "currentScreen"}) {
+				try {
+					return gui.getClass().getMethod(n).invoke(gui) == null;
+				} catch (NoSuchMethodException ignored) {
+				}
+			}
+			return gui.getClass().getField("screen").get(gui) == null;
+		} catch (Throwable t) {
+			return true;
 		}
 	}
 
